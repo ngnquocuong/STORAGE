@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/luu_tru_file_vo_bo_nho_trong"
-        android:textSize="25sp" />
+        android:text="Lưu trữ file vào bộ nhớ" />
 
     <EditText
         android:id="@+id/myInputText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="name"
         android:ems="10"
         android:gravity="top|left"
-        android:hint="@string/enter_your_text_here"
+        android:hint="Enter your text here"
         android:inputType="textMultiLine"
         android:lines="5"
         android:minLines="3">
@@ -26,28 +24,17 @@
         <requestFocus />
     </EditText>
 
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:orientation="horizontal"
+    <Button
+        android:id="@+id/btnSave"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:text="Lưu vào bộ nhớ ngoài" />
 
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_weight="1"
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/luu_vao" />
-
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_weight="1"
-            android:id="@+id/btnDisplay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/lay_du_lieu" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lấy dữ liệu từ bộ nhớ ngoài" />
 
     <TextView
         android:id="@+id/responseText"
@@ -56,5 +43,4 @@
         android:padding="5dp"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
 </LinearLayout>

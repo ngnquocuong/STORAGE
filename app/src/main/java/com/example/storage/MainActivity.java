@@ -1,15 +1,5 @@
 package com.example.storage;
 
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -18,66 +8,66 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    Button btnSave, btnDisplay;
-    EditText myInputText;
-    TextView responseText;
-    //Tên file được tạo
-    private String filename = "internalStorage.txt";
+import android.os.Bundle;
+import android.os.Environment;
+import android.app.Activity;
 
-    //Thư mục do mình đặt
-    private String filepath = "ThuMucCuaToi";
-    File myInternalFile;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class MainActivity extends Activity implements OnClickListener {
+    Button btnSave, readFromExternalStorage;
+    private String filename = "MySampleFile.txt";
+    private String filepath = "MyFileStorage";
+    TextView responseText;
+    EditText myInputText;
+    File myExternalFile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        ContextWrapper contextWrapper = new ContextWrapper(
-                getApplicationContext());
-        //Tạo (Hoặc là mở file nếu nó đã tồn tại) Trong bộ nhớ trong có thư mục là ThuMucCuaToi.
-        File directory = contextWrapper.getDir(filepath, Context.MODE_PRIVATE);
-        myInternalFile = new File(directory, filename);
-        //Gọi hàm initView
+        // check if external storage is available and not read only
+        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+            btnSave.setEnabled(false);
+        } else {
+            myExternalFile = new File(getExternalFilesDir(filepath), filename);
+        }
 
     }
 
     private void initView() {
         myInputText = (EditText) findViewById(R.id.myInputText);
         responseText = (TextView) findViewById(R.id.responseText);
-        // Các sự kiện
         btnSave = (Button) findViewById(R.id.btnSave);
         btnSave.setOnClickListener(this);
-        btnDisplay = (Button) findViewById(R.id.btnDisplay);
-        btnDisplay.setOnClickListener(this);
+        readFromExternalStorage = (Button) findViewById(R.id.btnDisplay);
+        readFromExternalStorage.setOnClickListener(this);
     }
 
     public void onClick(View v) {
-
         String myData = "";
         if (v.getId() == R.id.btnSave) {
             try {
-                //Mở file
-                FileOutputStream fos = new FileOutputStream(myInternalFile);
-                //Ghi dữ liệu vào file
+                FileOutputStream fos = new FileOutputStream(myExternalFile);
                 fos.write(myInputText.getText().toString().getBytes());
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             myInputText.setText("");
-            responseText
-                    .setText("Đã được lưu vào bộ nhớ trong");
+            responseText.setText("Dữ liệu đã được lưu vào bộ nhớ ngoài");
         } else if (v.getId() == R.id.btnDisplay) {
             try {
-                //Đọc file
-                FileInputStream fis = new FileInputStream(myInternalFile);
+                FileInputStream fis = new FileInputStream(myExternalFile);
                 DataInputStream in = new DataInputStream(fis);
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(in));
                 String strLine;
-                //Đọc từng dòng
                 while ((strLine = br.readLine()) != null) {
                     myData = myData + strLine;
                 }
@@ -86,8 +76,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
             myInputText.setText(myData);
-            responseText
-                    .setText("Lấy dữ liệu từ bộ nhớ trong");
+            responseText.setText("Được lấy ra từ bộ nhớ ngoài");
         }
+    }
+
+    /*
+     * Kiểm tra xe bộ nhớ ngoài SDCard có readonly không vì nếu là readonly thì
+     * không thể tạo file trên đó được
+     */
+    private static boolean isExternalStorageReadOnly() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+
+    /*
+     * Kiểmtra xem device có bộ nhớ ngoài không
+     */
+    private static boolean isExternalStorageAvailable() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+            return true;
+        }
+        return false;
     }
 }
