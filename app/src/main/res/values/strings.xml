@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">STORAGE</string>
+    <string name="tai_du_lieu">Tải Dữ Liệu</string>
+    <string name="luu_du_lieu">Lưu Dữ Liệu</string>
+    <string name="lay_du_lieu">Lấy dữ liệu</string>
+    <string name="luu_vao">Lưu vào</string>
+    <string name="luu_tru_file_vo_bo_nho_trong">Lưu trữ file vào bộ nhớ trong</string>
+    <string name="enter_your_text_here">Enter your text here</string>
+</resources>
